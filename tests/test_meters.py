@@ -1,7 +1,7 @@
 """Тесты класса Meter."""
+
 from models import Meter
-from models.meters import (add_meter, find_meter,
-                           filter_meters_by_tariff, sort_meters)
+from models.meters import add_meter, find_meter, filter_meters_by_tariff, sort_meters
 
 
 def test_meter_creation():
@@ -48,19 +48,25 @@ def test_add_meter():
 
 
 def test_find_meter():
-    meters = [Meter("EL", "Электроэнергия", "кВт·ч", 5.50),
-              Meter("CW", "Холодная вода", "м³", 42.30)]
+    meters = [
+        Meter("EL", "Электроэнергия", "кВт·ч", 5.50),
+        Meter("CW", "Холодная вода", "м³", 42.30),
+    ]
     assert len(find_meter(meters, "вода")) == 1
 
 
 def test_filter_meters_by_tariff():
-    meters = [Meter("EL", "Электроэнергия", "кВт·ч", 5.50),
-              Meter("HW", "Горячая вода", "м³", 198.75)]
+    meters = [
+        Meter("EL", "Электроэнергия", "кВт·ч", 5.50),
+        Meter("HW", "Горячая вода", "м³", 198.75),
+    ]
     assert len(filter_meters_by_tariff(meters, 50.0)) == 1
 
 
 def test_sort_meters():
-    meters = [Meter("HW", "Горячая вода", "м³", 198.75),
-              Meter("EL", "Электроэнергия", "кВт·ч", 5.50)]
+    meters = [
+        Meter("HW", "Горячая вода", "м³", 198.75),
+        Meter("EL", "Электроэнергия", "кВт·ч", 5.50),
+    ]
     result = sort_meters(meters)
     assert result[0].code == "EL"

@@ -33,12 +33,11 @@ def save_meters(filename: str, meters: List[Meter]) -> None:
     """Сохранить счётчики в JSON."""
     _ensure_dir(filename)
     with open(filename, "w", encoding="utf-8") as file:
-        json.dump([m.to_data() for m in meters], file,
-                  ensure_ascii=False, indent=2)
+        json.dump([m.to_data() for m in meters],
+                  file, ensure_ascii=False, indent=2)
 
 
-def load_readings(filename: str,
-                  meters: List[Meter]) -> List[Reading]:
+def load_readings(filename: str, meters: List[Meter]) -> List[Reading]:
     """Загрузить показания, связав их с объектами счётчиков."""
     if not os.path.exists(filename):
         return []
@@ -62,5 +61,5 @@ def save_readings(filename: str, readings: List[Reading]) -> None:
     """Сохранить показания в JSON."""
     _ensure_dir(filename)
     with open(filename, "w", encoding="utf-8") as file:
-        json.dump([r.to_data() for r in readings], file,
-                  ensure_ascii=False, indent=2)
+        json.dump([r.to_data() for r in readings],
+                  file, ensure_ascii=False, indent=2)

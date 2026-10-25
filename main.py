@@ -3,15 +3,25 @@
 from typing import List
 
 from models.meters import (
-    Meter, add_meter, find_meter, filter_meters_by_tariff,
-    sort_meters, get_default_meters,
+    Meter,
+    add_meter,
+    find_meter,
+    filter_meters_by_tariff,
+    sort_meters,
+    get_default_meters,
 )
 from models.readings import (
-    Reading, add_reading, filter_readings_by_meter,
-    sort_readings_by_date, get_statistics,
+    Reading,
+    add_reading,
+    filter_readings_by_meter,
+    sort_readings_by_date,
+    get_statistics,
 )
 from storage import (
-    load_meters, save_meters, load_readings, save_readings,
+    load_meters,
+    save_meters,
+    load_readings,
+    save_readings,
 )
 from utils import input_int, input_float, input_date
 
@@ -57,8 +67,7 @@ def print_menu() -> None:
     print("=" * 40)
 
 
-def handle_add_reading(meters: List[Meter],
-                       readings: List[Reading]) -> None:
+def handle_add_reading(meters: List[Meter], readings: List[Reading]) -> None:
     """Сценарий добавления показания."""
     if not meters:
         print("  Сначала добавьте счетчик.")

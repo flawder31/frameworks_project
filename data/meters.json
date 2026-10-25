@@ -22,5 +22,17 @@
     "name": "Газ",
     "unit": "м³",
     "tariff": 6.85
+  },
+  {
+    "code": "4",
+    "name": "32",
+    "unit": "4",
+    "tariff": 5.0
+  },
+  {
+    "code": "AS",
+    "name": "ВВВ",
+    "unit": "КВч",
+    "tariff": 354.0
   }
 ]

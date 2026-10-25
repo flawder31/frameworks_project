@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "meter_code": "AS",
+    "previous": 344.0,
+    "current": 456.0,
+    "date": "2026-01-22",
+    "consumption": 112.0,
+    "cost": 39648.0
+  }
+]

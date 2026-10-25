@@ -9,8 +9,9 @@ from .meters import Meter
 class Reading:
     """Показание счётчика."""
 
-    def __init__(self, meter: Meter, previous: float,
-                 current: float, reading_date: str) -> None:
+    def __init__(
+        self, meter: Meter, previous: float, current: float, reading_date: str
+    ) -> None:
         """Создать объект показания."""
         self.meter = meter
         self.previous = previous
@@ -66,15 +67,22 @@ class Reading:
 
     def __str__(self) -> str:
         """Строковое представление показания."""
-        return (f"{self.reading_date} | {self.meter.name} | "
-                f"{self.previous} -> {self.current} | "
-                f"расход {self.consumption} {self.meter.unit} | "
-                f"{self.cost:.2f} руб.")
+        return (
+            f"{self.reading_date} | {self.meter.name} | "
+            f"{self.previous} -> {self.current} | "
+            f"расход {self.consumption} {self.meter.unit} | "
+            f"{self.cost:.2f} руб."
+        )
 
 
-def add_reading(readings: List[Reading], meters: List[Meter],
-                meter_code: str, previous: float, current: float,
-                reading_date: date) -> Reading:
+def add_reading(
+    readings: List[Reading],
+    meters: List[Meter],
+    meter_code: str,
+    previous: float,
+    current: float,
+    reading_date: date,
+) -> Reading:
     """Создать показание и добавить его в коллекцию."""
     meter = None
     for m in meters:
@@ -93,8 +101,7 @@ def add_reading(readings: List[Reading], meters: List[Meter],
     return reading
 
 
-def filter_readings_by_meter(readings: List[Reading],
-                             meter_code: str) -> List[Reading]:
+def filter_readings_by_meter(readings: List[Reading], meter_code: str) -> List[Reading]:
     """Отобрать показания по коду счётчика."""
     return [r for r in readings if r.meter.code == meter_code]
 

@@ -22,9 +22,14 @@ def calculate_cost(consumption: float, tariff: float) -> float:
     return round(consumption * tariff, 2)
 
 
-def add_reading(readings: list, meters: dict, meter_code: str,
-                previous: float, current: float,
-                reading_date: date) -> dict:
+def add_reading(
+    readings: list,
+    meters: dict,
+    meter_code: str,
+    previous: float,
+    current: float,
+    reading_date: date,
+) -> dict:
     """Добавить показание. Возбуждает ValueError при ошибке."""
     if meter_code not in meters:
         raise ValueError(f"Счётчик с кодом '{meter_code}' не найден")

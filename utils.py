@@ -5,8 +5,7 @@ from datetime import date, datetime
 DATE_FORMAT = "%d.%m.%Y"
 
 
-def input_int(prompt: str, min_value: int = None,
-              max_value: int = None) -> int:
+def input_int(prompt: str, min_value: int = None, max_value: int = None) -> int:
     """Запросить целое число с повторением при ошибке."""
     while True:
         raw = input(prompt).strip()

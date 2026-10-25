@@ -6,8 +6,7 @@ from typing import List
 class Meter:
     """Счётчик ресурса."""
 
-    def __init__(self, meter_code: str, name: str,
-                 unit: str, tariff: float) -> None:
+    def __init__(self, meter_code: str, name: str, unit: str, tariff: float) -> None:
         """Создать объект счётчика."""
         self.code = meter_code
         self.name = name
@@ -43,12 +42,12 @@ class Meter:
 
     def __str__(self) -> str:
         """Строковое представление счётчика."""
-        return (f"[{self.code}] {self.name} — "
-                f"{self.tariff:.2f} руб./{self.unit}")
+        return f"[{self.code}] {self.name} — " f"{self.tariff:.2f} руб./{self.unit}"
 
 
-def add_meter(meters: List[Meter], meter_code: str, name: str,
-              unit: str, tariff: float) -> Meter:
+def add_meter(
+    meters: List[Meter], meter_code: str, name: str, unit: str, tariff: float
+) -> Meter:
     """Создать объект Meter и добавить в коллекцию."""
     meter = Meter(meter_code, name, unit, tariff)
     meters.append(meter)
@@ -68,8 +67,7 @@ def find_meter(meters: List[Meter], query: str) -> List[Meter]:
     return [m for m in meters if m.matches_query(query)]
 
 
-def filter_meters_by_tariff(meters: List[Meter],
-                            max_tariff: float) -> List[Meter]:
+def filter_meters_by_tariff(meters: List[Meter], max_tariff: float) -> List[Meter]:
     """Отобрать счётчики по тарифу."""
     return [m for m in meters if m.is_tariff_within(max_tariff)]
 

@@ -15,8 +15,9 @@ def get_meter_info(meter_code: str) -> tuple:
         return "Неизвестный ресурс", "-", 0.0
 
 
-def add_meter(meters: dict, meter_code: str, name: str,
-              unit: str, tariff: float) -> None:
+def add_meter(
+    meters: dict, meter_code: str, name: str, unit: str, tariff: float
+) -> None:
     """Добавить счётчик в словарь meters."""
     meters[meter_code] = {
         "name": name,
@@ -31,12 +32,14 @@ def find_meter(meters: dict, query: str) -> list:
     result = []
     for code, info in meters.items():
         if query_lower in info["name"].lower():
-            result.append({
-                "code": code,
-                "name": info["name"],
-                "unit": info["unit"],
-                "tariff": info["tariff"],
-            })
+            result.append(
+                {
+                    "code": code,
+                    "name": info["name"],
+                    "unit": info["unit"],
+                    "tariff": info["tariff"],
+                }
+            )
     return result
 
 
