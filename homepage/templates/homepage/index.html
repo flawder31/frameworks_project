@@ -3,10 +3,40 @@
 {% block title %}Главная - Сервис счетчиков{% endblock %}
 
 {% block content %}
-    <h1 class="display-4">Сервис учета показаний</h1>
-    <p class="lead">Приложение для учета потребления ресурсов по счетчикам.</p>
-    <hr class="my-4">
-    <p>Выберите раздел:</p>
-    <a href="{% url 'meters:list' %}" class="btn btn-primary me-2">Счетчики</a>
-    <a href="{% url 'readings:list' %}" class="btn btn-secondary">Показания</a>
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Сервис учета показаний</h1>
+            <p class="col-md-8 fs-4">Приложение для контроля потребления ресурсов и расчета стоимости по тарифам.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Справочник</h5>
+                    <p class="card-text">Просмотр доступных счетчиков и их тарифов.</p>
+                    <a href="{% url 'meters:list' %}" class="btn btn-primary">Счетчики</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">История</h5>
+                    <p class="card-text">Просмотр ранее внесенных показаний и статистики.</p>
+                    <a href="{% url 'readings:list' %}" class="btn btn-secondary">Показания</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Новое показание</h5>
+                    <p class="card-text">Внести текущие показания счетчика и рассчитать стоимость.</p>
+                    <a href="{% url 'readings:add' %}" class="btn btn-success">Внести показание</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

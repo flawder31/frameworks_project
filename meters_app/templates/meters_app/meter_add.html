@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Новый счетчик{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Добавить счетчик</h2>
+            {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+            
+            <form method="post" class="card p-4 shadow-sm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Код (например, EL, CW)</label>
+                    <input type="text" name="code" class="form-control" required maxlength="10">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Название ресурса</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Единица измерения</label>
+                    <input type="text" name="unit" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Тариф (руб.)</label>
+                    <input type="number" step="0.01" name="tariff" class="form-control" required min="0">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+                <a href="{% url 'meters:list' %}" class="btn btn-link w-100 mt-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
