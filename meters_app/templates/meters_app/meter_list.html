@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Счетчики - Сервис{% endblock %}
+
+{% block content %}
+    <h1>Справочник счетчиков</h1>
+    <p>Всего счетчиков: {{ meters|length }}</p>
+    
+    <div class="row">
+        {% for meter in meters %}
+            {% include "meters_app/includes/meter_card.html" %}
+        {% empty %}
+            <p>Счетчики не найдены.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

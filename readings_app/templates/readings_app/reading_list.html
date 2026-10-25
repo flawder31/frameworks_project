@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Показания - Сервис{% endblock %}
+
+{% block content %}
+    <h1>История показаний</h1>
+    <p>Всего записей: {{ readings|length }}</p>
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Счетчик</th>
+                <th>Показания</th>
+                <th>Расход</th>
+                <th>Стоимость</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in readings %}
+            <tr>
+                <td>{{ r.reading_date }}</td>
+                <td>{{ r.meter.name }}</td>
+                <td>{{ r.previous }} → {{ r.current }}</td>
+                <td>{{ r.consumption }} {{ r.meter.unit }}</td>
+                <td>{{ r.cost }} руб.</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Показаний пока нет.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

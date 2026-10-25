@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Сервис счетчиков{% endblock %}
+
+{% block content %}
+    <h1 class="display-4">Сервис учета показаний</h1>
+    <p class="lead">Приложение для учета потребления ресурсов по счетчикам.</p>
+    <hr class="my-4">
+    <p>Выберите раздел:</p>
+    <a href="{% url 'meters:list' %}" class="btn btn-primary me-2">Счетчики</a>
+    <a href="{% url 'readings:list' %}" class="btn btn-secondary">Показания</a>
+{% endblock %}

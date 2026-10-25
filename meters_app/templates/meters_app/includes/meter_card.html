@@ -1,0 +1,12 @@
+<div class="col-md-4 mb-3">
+    <div class="card meter-card h-100">
+        <div class="card-body">
+            <h5 class="card-title">{{ meter.name|default:"Без названия" }}</h5>
+            <p class="card-text">
+                Код: <strong>{{ meter.code }}</strong><br>
+                Тариф: {{ meter.tariff }} руб./{{ meter.unit }}
+            </p>
+            <a href="{% url 'meters:detail' meter.code %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+        </div>
+    </div>
+</div>

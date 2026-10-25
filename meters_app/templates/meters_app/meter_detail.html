@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if meter %}{{ meter.name }} - Счетчики{% else %}Не найдено{% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if meter %}
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ meter.name }}</h1>
+                <p class="card-text"><strong>Код:</strong> {{ meter.code }}</p>
+                <p class="card-text"><strong>Единица:</strong> {{ meter.unit }}</p>
+                <p class="card-text"><strong>Тариф:</strong> {{ meter.tariff }} руб.</p>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-danger">Счетчик не найден</h1>
+        <p>Счетчика с указанным кодом не существует.</p>
+    {% endif %}
+    <a href="{% url 'meters:list' %}" class="btn btn-outline-secondary mt-3">← К списку</a>
+{% endblock %}
