@@ -1,27 +1,15 @@
-import sqlite3
-from django.shortcuts import render, redirect
-
-DB_PATH = "data/meterly.sqlite"
-
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Meter
 
 def meters_list(request):
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    meters = conn.execute(
-        "SELECT code, name, unit, tariff FROM meters ORDER BY name").fetchall()
-    conn.close()
+    # Получаем все счетчики, отсортированные по имени (как в Meta модели)
+    meters = Meter.objects.all()
     return render(request, "meters_app/meter_list.html", {"meters": meters})
 
-
 def meter_detail(request, meter_code):
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    meter = conn.execute(
-        "SELECT code, name, unit, tariff FROM meters WHERE code = ?", (meter_code,)).fetchone()
-    conn.close()
-    status_code = 404 if meter is None else 200
-    return render(request, "meters_app/meter_detail.html", {"meter": meter}, status=status_code)
-
+    # Получаем один объект или возвращаем 404
+    meter = get_object_or_404(Meter, code=meter_code)
+    return render(request, "meters_app/meter_detail.html", {"meter": meter})
 
 def add_meter(request):
     error = None
@@ -43,39 +31,36 @@ def add_meter(request):
                 error = "Тариф должен быть числом."
 
         if not error:
-            conn = sqlite3.connect(DB_PATH)
             try:
-                conn.execute("""
-                    INSERT INTO meters (code, name, unit, tariff)
-                    VALUES (?, ?, ?, ?)
-                """, (code, name, unit, tariff))
-                conn.commit()
-                conn.close()
+                # Создаем запись через ORM
+                Meter.objects.create(
+                    code=code, 
+                    name=name, 
+                    unit=unit, 
+                    tariff=tariff
+                )
                 return redirect("meters:list")
-            except sqlite3.IntegrityError:
+            except Exception:
+                # Если код уже существует (IntegrityError), Django сам обработает это, 
+                # но можно поймать исключение для красивого сообщения
                 error = f"Счетчик с кодом '{code}' уже существует."
-                conn.close()
 
     return render(request, "meters_app/meter_add.html", {"error": error})
 
-
 def delete_meter(request, meter_code):
     if request.method == "POST":
-        conn = sqlite3.connect(DB_PATH)
-        try:
-            # Проверяем, есть ли показания по этому счетчику
-            count = conn.execute(
-                "SELECT COUNT(*) FROM readings WHERE meter_code = ?", (meter_code,)).fetchone()[0]
-            if count > 0:
-                # Если есть, удалять нельзя (защита данных)
-                return render(request, "meters_app/meter_list.html", {
-                    "meters": conn.execute("SELECT * FROM meters").fetchall(),
-                    "error": f"Нельзя удалить '{meter_code}': по нему есть {count} показаний."
-                })
-
-            conn.execute("DELETE FROM meters WHERE code = ?", (meter_code,))
-            conn.commit()
-        finally:
-            conn.close()
-
+        meter = get_object_or_404(Meter, code=meter_code)
+        
+        # Проверяем, есть ли показания (используем related_name="readings")
+        if meter.readings.exists():
+            count = meter.readings.count()
+            meters = Meter.objects.all() # Для обновления списка в шаблоне
+            return render(request, "meters_app/meter_list.html", {
+                "meters": meters,
+                "error": f"Нельзя удалить '{meter_code}': по нему есть {count} показаний."
+            })
+        
+        meter.delete()
+        return redirect("meters:list")
+    
     return redirect("meters:list")
