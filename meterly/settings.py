@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "homepage",
     "meters_app",
     "readings_app",
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -37,6 +38,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -54,6 +56,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'meters_app.context_processors.meter_stats',
             ],
         },
     },
@@ -114,3 +117,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]  # Чтобы Django видел общую папку static
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

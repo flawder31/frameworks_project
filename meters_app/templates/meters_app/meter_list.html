@@ -24,7 +24,7 @@
                             Тариф: {{ meter.tariff }} руб./{{ meter.unit }}
                         </p>
                         <div class="d-flex justify-content-between">
-                            <a href="{% url 'meters:detail' meter.code %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                            <a href="{{ meter.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Подробнее</a>
                             <form method="post" action="{% url 'meters:delete' meter.code %}" onsubmit="return confirm('Точно удалить счетчик?');">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>

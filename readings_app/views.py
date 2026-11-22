@@ -6,67 +6,59 @@ from .models import Reading
 from meters_app.models import Meter
 
 def readings_list(request):
-    # 1. ФИЛЬТРАЦИЯ (Пункт 5.13)
-    # Получаем параметры из GET-запроса
+    # 1. ФИЛЬТРАЦИЯ (используем новые методы менеджера)
     meter_code = request.GET.get("meter", "").strip()
     date_from = request.GET.get("date_from", "").strip()
     date_to = request.GET.get("date_to", "").strip()
     
-    # Начинаем с базового запроса, используя select_related для оптимизации (JOIN)
+    # Начинаем с базового запроса через наш менеджер
     readings_qs = Reading.objects.select_related('meter').all()
 
-    # Фильтр по конкретному счетчику
+    # Используем метод for_meter, если выбран счетчик
     if meter_code:
-        readings_qs = readings_qs.filter(meter__code=meter_code)
+        readings_qs = readings_qs.for_meter(meter_code)
 
-    # Фильтр по диапазону дат
-    if date_from:
+    # Фильтр по датам
+    if date_from and date_to:
         try:
             dt_from = datetime.strptime(date_from, "%Y-%m-%d").date()
-            readings_qs = readings_qs.filter(reading_date__gte=dt_from)
-        except ValueError:
-            pass # Игнорируем некорректную дату
-            
-    if date_to:
-        try:
             dt_to = datetime.strptime(date_to, "%Y-%m-%d").date()
-            readings_qs = readings_qs.filter(reading_date__lte=dt_to)
+            readings_qs = readings_qs.for_date_range(dt_from, dt_to)
         except ValueError:
             pass
-
-    # 2. СОРТИРОВКА (Пункт 5.14)
+            
+    # 2. СОРТИРОВКА
     sort_by = request.GET.get("sort", "-reading_date")
-    # Защищаемся от произвольных значений в URL
     allowed_sorts = ["reading_date", "-reading_date", "cost", "-cost", "consumption", "-consumption"]
     if sort_by not in allowed_sorts:
         sort_by = "-reading_date"
     
     readings_qs = readings_qs.order_by(sort_by)
 
-    # Аннотирование для удобства в шаблоне (чтобы не писать meter.name каждый раз)
+    # Аннотирование
     readings_qs = readings_qs.annotate(
         meter_name=F('meter__name'),
         unit=F('meter__unit')
     )
 
-    # 3. ПАГИНАЦИЯ (Пункт 5.15)
-    paginator = Paginator(readings_qs, 5)  # По 5 записей на страницу
+    # 3. ПАГИНАЦИЯ
+    paginator = Paginator(readings_qs, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    # Получаем список всех счетчиков для формы фильтрации
     meters = Meter.objects.all().order_by("name")
 
     context = {
-        "page_obj": page_obj,       # Передаем объект страницы, а не просто список
-        "meters": meters,           # Для выпадающего списка фильтров
-        "current_meter": meter_code,# Чтобы сохранить выбор в селекте
-        "date_from": date_from,     # Чтобы сохранить даты в инпутах
+        "page_obj": page_obj,
+        "meters": meters,
+        "current_meter": meter_code,
+        "date_from": date_from,
         "date_to": date_to,
-        "current_sort": sort_by,    # Чтобы подсветить активную сортировку
+        "current_sort": sort_by,
     }
     
     return render(request, "readings_app/reading_list.html", context)
+
 
 def add_reading(request):
     meters = Meter.objects.all() 

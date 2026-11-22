@@ -6,9 +6,9 @@ def meters_list(request):
     meters = Meter.objects.all()
     return render(request, "meters_app/meter_list.html", {"meters": meters})
 
-def meter_detail(request, meter_code):
-    # Получаем один объект или возвращаем 404
-    meter = get_object_or_404(Meter, code=meter_code)
+def meter_detail(request, slug):
+    # Ищем по слагу
+    meter = get_object_or_404(Meter, slug=slug)
     return render(request, "meters_app/meter_detail.html", {"meter": meter})
 
 def add_meter(request):
@@ -49,18 +49,21 @@ def add_meter(request):
 
 def delete_meter(request, meter_code):
     if request.method == "POST":
+        # Получаем объект счетчика или возвращаем 404
         meter = get_object_or_404(Meter, code=meter_code)
         
-        # Проверяем, есть ли показания (используем related_name="readings")
+        # Проверяем, есть ли связанные показания (используем related_name="readings")
         if meter.readings.exists():
             count = meter.readings.count()
-            meters = Meter.objects.all() # Для обновления списка в шаблоне
+            meters = Meter.objects.all().order_by("name") # Получаем список для отображения ошибки
             return render(request, "meters_app/meter_list.html", {
                 "meters": meters,
-                "error": f"Нельзя удалить '{meter_code}': по нему есть {count} показаний."
+                "error": f"Нельзя удалить '{meter.code}': по нему есть {count} показаний."
             })
         
+        # Если показаний нет, удаляем счетчик
         meter.delete()
         return redirect("meters:list")
     
+    # Если метод не POST, просто перенаправляем на список
     return redirect("meters:list")

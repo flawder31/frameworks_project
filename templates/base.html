@@ -5,22 +5,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Сервис счетчиков{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Bootstrap 5 CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Фикс для Django Debug Toolbar и базовая стилизация -->
+    <style>
+        /* Отступ справа, чтобы тулбар не перекрывал контент */
+        body {
+            padding-right: 0 !important; 
+            position: relative;
+        }
+        
+        /* Гарантируем, что контейнер не вылезает за пределы */
+        .container-fluid, .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Стилизация карточек счетчиков */
+        .meter-card {
+            transition: transform 0.2s;
+            border-left: 4px solid #0d6efd;
+        }
+        .meter-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        }
+
+        /* Адаптация под темную тему тулбара */
+        @media (min-width: 768px) {
+            main.container {
+                margin-right: 20px; /* Небольшой отступ от тулбара */
+            }
+        }
+    </style>
 </head>
 <body class="bg-light">
-    {% include "includes/navigation.html" %}
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'homepage:index' %}">
+                ⚡ {{ site_name|default:"Сервис Счетчиков" }}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <main class="container bg-white p-4 rounded shadow-sm mt-4">
-        {% block content %}
-        {% endblock %}
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'homepage:index' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'meters:list' %}">
+                            Счетчики {% if total_meters %}({{ total_meters }}){% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'readings:list' %}">Показания</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a class="btn btn-success btn-sm fw-bold" href="{% url 'readings:add' %}">+ Внести показание</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="container bg-white p-4 rounded shadow-sm mt-2 mb-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
     </main>
 
-    <footer class="container mt-4 mb-3 text-center text-muted">
-        <p>© <span id="current-year"></span> Сервис учета показаний</p>
+    <!-- Футер -->
+    <footer class="container text-center text-muted py-3 border-top">
+        <small>© <span id="current-year"></span> Сервис учета показаний. ПР9-ПР10</small>
     </footer>
 
-  
-    <script src="{% static 'js/main.js' %}"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
