@@ -6,17 +6,38 @@
 
 {% block content %}
     {% if meter %}
-        <div class="card">
+        <div class="card shadow-sm">
+            <!-- Отображаем изображение счетчика, если оно есть -->
+            {% if meter.image %}
+                <img src="{{ meter.image.url }}" alt="{{ meter.name }}" class="card-img-top" style="max-height: 300px; object-fit: cover;">
+            {% endif %}
+            
             <div class="card-body">
                 <h1 class="card-title">{{ meter.name }}</h1>
+                
                 <p class="card-text"><strong>Код:</strong> {{ meter.code }}</p>
-                <p class="card-text"><strong>Единица:</strong> {{ meter.unit }}</p>
+                <p class="card-text"><strong>Единица измерения:</strong> {{ meter.unit }}</p>
                 <p class="card-text"><strong>Тариф:</strong> {{ meter.tariff }} руб.</p>
+                
+                <!-- Кнопки действий -->
+                <div class="mt-4 d-flex gap-2">
+                    <!-- Ссылка на редактирование через slug -->
+                    <a href="{% url 'meters:edit' meter.slug %}" class="btn btn-warning">✏️ Редактировать</a>
+                    
+                    <!-- Форма удаления через POST (безопасность) -->
+                    <form method="post" action="{% url 'meters:delete' meter.slug %}" onsubmit="return confirm('Вы уверены? Это действие нельзя отменить.');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">🗑️ Удалить</button>
+                    </form>
+                </div>
             </div>
         </div>
     {% else %}
-        <h1 class="text-danger">Счетчик не найден</h1>
-        <p>Счетчика с указанным кодом не существует.</p>
+        <div class="alert alert-danger text-center">
+            <h1 class="alert-heading">Счетчик не найден</h1>
+            <p>Запрашиваемый счетчик не существует или был удален.</p>
+        </div>
     {% endif %}
-    <a href="{% url 'meters:list' %}" class="btn btn-outline-secondary mt-3">← К списку</a>
+    
+    <a href="{% url 'meters:list' %}" class="btn btn-outline-secondary mt-3">← Вернуться к списку</a>
 {% endblock %}

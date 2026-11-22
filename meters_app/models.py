@@ -10,6 +10,12 @@ class Meter(models.Model):
         verbose_name="Код счетчика",
         help_text="Например: EL, CW, GAS"
     )
+    image = models.ImageField(
+        upload_to="meters_photos/", 
+        blank=True, 
+        null=True, 
+        verbose_name="Фото счетчика"
+    )
     name = models.CharField(max_length=100, verbose_name="Название")
     unit = models.CharField(max_length=20, verbose_name="Единица измерения")
     tariff = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Тариф")

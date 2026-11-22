@@ -9,4 +9,5 @@ urlpatterns = [
     # Изменили <meter_code> на <slug:slug>
     path("<slug:slug>/", views.meter_detail, name="detail"),
     path("<slug:slug>/delete/", views.delete_meter, name="delete"),
+    path("<slug:slug>/edit/", views.edit_meter, name="edit"),
 ]
